@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal db</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Search any meal  By the First Letter</h1>
+
+    <div id="searchBox">
+        <input type="text" id="searchInput" placeholder="Enter a meal name">
+        <button onclick="searchMeals()">Search</button>
+    </div>
+
+    <div id="results"></div>
+    <div id="youtubeVideo"></div>
+
+    <script>
+        function searchMeals() {
+            const searchInput = document.getElementById('searchInput').value;
+
+            fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${searchInput}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayMealResult(data.meals);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function displayMealResult(meals) {
+            const resultsContainer = document.getElementById('results');
+            
+            
+            resultsContainer.textContent = ''; 
+         
+
+           
+            meals.forEach(meal => {
+                const mealDiv = document.createElement('div');
+                mealDiv.className = 'meal';
+
+                mealDiv.innerHTML = `
+                <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+
+                    <h2>${meal.strMeal}</h2>
+                    <p><b>MealId:</b> ${meal.idMeal}</p>
+                    <p><b>Area of origin:</b> ${meal.strArea}</p>
+                    <p><b>Meal Category:</b> ${meal.strCategory}</p>
+                    <p><b>Meal tag:</b> ${meal.strTags}</p>
+                `;
+
+                resultsContainer.appendChild(mealDiv);
+
+             
+             
+            });
+        }
+
+      
+    </script>
+
+</body>
+</html>
